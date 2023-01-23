@@ -1,17 +1,20 @@
 <samp>
 
-# Code snippets and resources for Enterprise development
+# Resources for Enterprise development
+[![.NET](https://github.com/sandhaka/seeds/actions/workflows/dotnet.yml/badge.svg)](https://github.com/sandhaka/seeds/actions/workflows/dotnet.yml)
 ## Index
 - [x] [Option](./Monads/Option): Implementation of Option<> generic type based on [Monads](https://en.wikipedia.org/wiki/Monad_(functional_programming)) to manage nullable
   - [x] Extensions: [Enumerable](./Monads/Option/EnumerableExtensions.cs), [Dictionary](./Monads/Option/DictionaryExtensions.cs), [Object](./Monads/Option/ObjectExtensions.cs)
-- [x] Domain-Driven-Design Seeds: Collection of DDD snippets for Enterprise projects
+ 
+
+- [x] Domain-Driven-Design Seeds: Collection of DDD snippets
   - About DDD:
     - [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design)
     - [Martin Fowler](https://martinfowler.com/tags/domain%20driven%20design.html) 
   - [x] [Domain](./Ddd/Domain/): Base classes for Domain Entities and Value Objects 
-    - [x] Entity
-    - [x] ValueObject
-    - [x] Event Sourcing
+    - [x] [Entity](./Ddd/Domain/Entity.cs)
+    - [x] [ValueObject](./Ddd/Domain/ValueObject.cs)
+    - [x] [Event Sourcing](./Ddd/Domain/EventSourcing)
   - [x] [Infrastructure](./Ddd/Infrastructure/): Base classes for Infrastructure
     - [x] [Event Sourced Repository](./Ddd/Infrastructure/Repositories/EventSourcedRepository.cs)
     - [x] [WebSocket Manager](./Ddd/Infrastructure/Managers/WebSocket)
