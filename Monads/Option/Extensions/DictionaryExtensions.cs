@@ -1,4 +1,4 @@
-namespace Monads.Option;
+namespace Monads.Option.Extensions;
 
 public static class DictionaryExtensions
 {
