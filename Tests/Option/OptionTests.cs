@@ -69,17 +69,14 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
     public void ShouldUseInSelectorExtendedTest()
     {
         var bankDeposit = new BankDeposit();
-        bankDeposit.Dollars += new Money(1000, "USD");
-        bankDeposit.Euros += new Money(1000, "EUR");
-        bankDeposit.Yens += new Money(3478, "JPY");
 
         var supportedCurrencies = bankDeposit.MultiCurrencies
-            .GroupBy(x => x.Currency)
+            .GroupBy(x => x.Map(v => v.Currency.Reduce(string.Empty)))
             .OrderBy(x => x.Key.Reduce(string.Empty))
             .Select(x => x.Key.Reduce(string.Empty))
             .ToList();
         
-        testOutputHelper.WriteLine($"Supported currencies: {supportedCurrencies.Count()}");
+        testOutputHelper.WriteLine($"Supported currencies: {supportedCurrencies.Count}");
         foreach (var currency in supportedCurrencies)
             testOutputHelper.WriteLine(currency);
         
