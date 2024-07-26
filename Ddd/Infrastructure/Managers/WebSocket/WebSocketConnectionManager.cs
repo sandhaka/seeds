@@ -22,6 +22,7 @@ public class WebSocketConnectionManager
     {
         return _sockets.FirstOrDefault(p => p.Value == socket).Key;
     }
+
     public void AddSocket(System.Net.WebSockets.WebSocket socket)
     {
         _sockets.TryAdd(CreateConnectionId(), socket);
@@ -31,9 +32,9 @@ public class WebSocketConnectionManager
     {
         _sockets.TryRemove(id, out var socket);
 
-        await socket.CloseAsync(WebSocketCloseStatus.NormalClosure,
-            "Closed by the WebSocketManager",
-            CancellationToken.None);
+        if (socket is not null)
+            await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by the WebSocketManager",
+                CancellationToken.None);
     }
 
     private static string CreateConnectionId()

@@ -1,5 +1,7 @@
 using Monads.Option;
 using Monads.Option.Extensions;
+using Tests.Option.Support;
+
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace Tests.Option;
@@ -7,40 +9,38 @@ namespace Tests.Option;
 public class OptionExtensionsTests
 {
     [Fact]
-    public void ShouldReturnSomeAsFirstElementOfSequences()
+    public void ShouldReturnOptionAsElementOfSequences()
     {
-        IEnumerable<Money> sequence = [ new Money(1, "USD"),  new Money(1000, "JPY")];
+        IEnumerable<Money> sequence = [ new Money(1, "USD"),  new Money(1000, "JPY") ];
         
-        var first = sequence.FirstOrNone();
-        
-        Assert.Equal(Option<Money>.Some(new Money(1, "USD")), first);
+        var first = sequence.FirstValueOrNone();
+        Assert.Equal(ValueOption<Money>.Some(new Money(1, "USD")), first);
 
         var anotherSequence = sequence.Concat([new Money(1, "CHF"), new Money(2, "USD")]);
         
-        var firstChf = anotherSequence.FirstOrNone(m => m.Currency == "CHF");
-        Assert.Equal(Option<Money>.Some(new Money(1, "CHF")), firstChf);
+        var firstChf = anotherSequence.FirstValueOrNone(m => m.Currency == "CHF");
+        Assert.Equal(ValueOption<Money>.Some(new Money(1, "CHF")), firstChf);
 
-        var firstEur = anotherSequence.FirstOrNone(m => m.Currency == "EUR");
-        Assert.Equal(Option<Money>.None(), firstEur);
+        var firstEur = anotherSequence.FirstValueOrNone(m => m.Currency == "EUR");
+        Assert.Equal(ValueOption<Money>.None(), firstEur);
     }
 
     [Fact]
-    public void ShouldReturnNoneAsFirstElementOfDictionary()
+    public void ShouldReturnOptionAsElementOfDictionary()
     {
-        var dictionary = new Dictionary<string, Option<Money>>
+        var dictionary = new Dictionary<string, Money>
         {
-            { "USD", Option<Money>.None() },
-            { "JPY", Option<Money>.Some(new Money(1000, "JPY")) }
+            { "USD", Money.Zero("USD") },
+            { "JPY", new Money(1000, "JPY") }
         };
 
-        dictionary.TryGetValue("USD", out var dollar);
+        var dollar = dictionary.TryGetOptionValue("USD");
+        Assert.Equal(ValueOption<Money>.Some(Money.Zero("USD")), dollar);
         
-        Assert.Equal(Option<Money>.None(), dollar);
+        var euro = dictionary.TryGetOptionValue("EUR");
+        Assert.Equal(ValueOption<Money>.None(), euro);
         
-        dictionary.TryGetValue("EUR", out var euro);
-        Assert.Equal(Option<Money>.None(), euro);
-        
-        dictionary.TryGetValue("JPY", out var yen);
-        Assert.Equal(Option<Money>.Some(new Money(1000, "JPY")), yen);
+        var yen = dictionary.TryGetOptionValue("JPY");
+        Assert.Equal(ValueOption<Money>.Some(new Money(1000, "JPY")), yen);
     }
 }

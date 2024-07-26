@@ -13,9 +13,15 @@ public static class DictionaryExtensions
     /// An Option that contains the retrieved value if the key was found in the dictionary,
     /// or None if the key was not found.
     /// </returns>
-    public static Option<TValue> TryGetValue<TKey, TValue>(
+    public static Option<TValue> TryGetOption<TKey, TValue>(
         this IDictionary<TKey, TValue> dictionary, TKey key) where TValue : class =>
         dictionary.TryGetValue(key, out TValue value)
             ? Option<TValue>.Some(value)
             : Option<TValue>.None();
+    
+    public static ValueOption<TValue> TryGetOptionValue<TKey, TValue>(
+        this IDictionary<TKey, TValue> dictionary, TKey key) where TValue : struct =>
+        dictionary.TryGetValue(key, out TValue value)
+            ? ValueOption<TValue>.Some(value)
+            : ValueOption<TValue>.None();
 }

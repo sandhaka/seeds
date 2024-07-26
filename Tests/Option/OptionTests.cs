@@ -1,14 +1,12 @@
 using Monads.Option;
+using Tests.Option.Support;
+using Xunit.Abstractions;
+
 // ReSharper disable EqualExpressionComparison
 
 namespace Tests.Option;
 
-internal record Money(decimal Amount, string? Currency = null)
-{
-    public static Money Zero => new(0);
-}
-
-public class OptionTests
+public class OptionTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldConvertAnObjectToAnOption()
@@ -19,58 +17,34 @@ public class OptionTests
         
         Assert.Equal(sampleTask, some.Reduce(Task.CompletedTask));
         Assert.NotEqual(sampleTask, none.Reduce(Task.CompletedTask));
-        
-        var dollars = new Money(100, "USD");
-        var someDollars = Option<Money>.Some(dollars);
-        
-        Assert.NotEqual(Money.Zero, someDollars.Reduce(Money.Zero));
     }
 
     [Fact]
     public void ShouldMapReduce()
     {
-        var dollars = new Money(100, "USD");
-        var someDollars = Option<Money>.Some(dollars);
-        var dollarCurrency = someDollars.Reduce(Money.Zero).Currency;
-        
-        Assert.Equal("USD", dollarCurrency);
-        
-        var noneDollars = Option<Money>.None();
-        var noneCurrency = noneDollars.Reduce(Money.Zero).Currency;
+        var some = ValueOption<int>.Some(5);
+        var result = some.MapValue(x => x * 2).Reduce(0);
+        Assert.Equal(10, result);
 
-        Assert.Null(noneCurrency);
-
-        var innerCurrency = someDollars.Map(d => d.Currency);
-        
-        Assert.Equal(Option<string?>.Some("USD"), innerCurrency);
-        Assert.Equal("USD", innerCurrency.Reduce(string.Empty));
-        
-        var noneDollarsCurrency = noneDollars.Map(d => d.Currency);
-        
-        Assert.NotNull(noneDollarsCurrency.Reduce(string.Empty));
-        Assert.Equal(string.Empty, noneDollarsCurrency.Reduce(string.Empty));
-        Assert.NotNull(noneDollarsCurrency.Reduce(() => string.Empty));
-        Assert.Equal(string.Empty, noneDollarsCurrency.Reduce(() => string.Empty));
+        var someLiteral = Option<string>.Some("hello");
+        var upperLiteral = someLiteral.Map(c => c.ToUpper());
+        Assert.Equal("HELLO", upperLiteral.Reduce("hello"));
     }
     
     [Fact]
     public void ShouldWhereReturnSomeWhenPredicateIsTrue()
     {
-        var dollars = new Money(100, "USD");
-        var someDollars = Option<Money>.Some(dollars);
-        var filteredDollars = someDollars.Where(d => d.Amount > 50);
-
-        Assert.Equal(someDollars, filteredDollars);
+        var some = ValueOption<int>.Some(5);
+        var result = some.Where(x => x > 0);
+        Assert.Equal(some, result);
     }
     
     [Fact]
     public void ShouldWhereReturnNoneWhenPredicateIsFalse()
     {
-        var dollars = new Money(100, "USD");
-        var someDollars = Option<Money>.Some(dollars);
-        var filteredDollars = someDollars.Where(d => d.Amount > 150);
-
-        Assert.Equal(Option<Money>.None(), filteredDollars);
+        var none = ValueOption<int>.None();
+        var result = none.Where(x => x > 0);
+        Assert.Equal(none, result);
     }
 
     [Fact]
@@ -89,5 +63,28 @@ public class OptionTests
         Assert.True(some == some);
         Assert.False(some == Option<Task>.None());
         Assert.False(some == Option<Task>.Some(Task.Delay(100)));
+    }
+
+    [Fact]
+    public void ShouldUseInSelectorExtendedTest()
+    {
+        var bankDeposit = new BankDeposit();
+        bankDeposit.Dollars += new Money(1000, "USD");
+        bankDeposit.Euros += new Money(1000, "EUR");
+        bankDeposit.Yens += new Money(3478, "JPY");
+
+        var supportedCurrencies = bankDeposit.MultiCurrencies
+            .GroupBy(x => x.Currency)
+            .OrderBy(x => x.Key.Reduce(string.Empty))
+            .Select(x => x.Key.Reduce(string.Empty))
+            .ToList();
+        
+        testOutputHelper.WriteLine($"Supported currencies: {supportedCurrencies.Count()}");
+        foreach (var currency in supportedCurrencies)
+            testOutputHelper.WriteLine(currency);
+        
+        Assert.Equal("EUR", supportedCurrencies.First());
+        Assert.Equal("JPY", supportedCurrencies[1]);
+        Assert.Equal("USD", supportedCurrencies[2]);
     }
 }

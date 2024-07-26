@@ -2,18 +2,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Monads.Option;
 
-public struct Option<T> : IEquatable<Option<T>> where T : class?
+public struct Option<T> : IEquatable<Option<T>> where T : class
 {
     private T? _content;
     
     public static Option<T> None() => new();
     public static Option<T> Some(T value) => new() { _content = value };
 
-    public Option<TResult> Map<TResult>(Func<T, TResult> map) where TResult : class? => 
+    public Option<TResult> Map<TResult>(Func<T, TResult> map) where TResult : class => 
         new() { _content = _content is not null ? map(_content) : null };
-    
-    public Option<TResult> MapOptional<TResult>(Func<T, Option<TResult>> map) where TResult : class? => 
-        _content is not null ? map(_content) : Option<TResult>.None();
+    public ValueOption<TResult> MapValue<TResult>(Func<T, TResult> map) where TResult : struct =>
+        _content is not null ? ValueOption<TResult>.Some(map(_content)) : ValueOption<TResult>.None();
     
     public T Reduce(T orElse) => _content ?? orElse;
     public T Reduce(Func<T> orElse) => _content ?? orElse();
@@ -24,7 +23,10 @@ public struct Option<T> : IEquatable<Option<T>> where T : class?
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is Option<T> other && Equals(other);
     public override int GetHashCode() => _content?.GetHashCode() ?? 0;
     public bool Equals(Option<T> other) => _content is null ? other._content is null : _content.Equals(other._content);
+    public bool Equals(T? other) => _content is null ? other is null : _content.Equals(other);
     
     public static bool operator ==(Option<T>? a, Option<T>? b) => a is null ? b is null : a.Equals(b);
     public static bool operator !=(Option<T>? a, Option<T>? b) => !(a == b);
+    public static bool operator ==(Option<T>? a, T? b) => a is null ? b is null : a.Value.Equals(b);
+    public static bool operator !=(Option<T>? a, T? b) => !(a == b);
 }
