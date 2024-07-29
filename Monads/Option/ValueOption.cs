@@ -29,4 +29,6 @@ public struct ValueOption<T> : IEquatable<ValueOption<T>> where T : struct
     public static bool operator !=(ValueOption<T> a, ValueOption<T> b) => !(a.Equals(b));
     public static bool operator ==(ValueOption<T> a, T b) => a.Equals(b);
     public static bool operator !=(ValueOption<T> a, T b) => !a.Equals(b);
+    
+    public override string ToString() => (_content is null ? string.Empty : _content.ToString()) ?? string.Empty;
 }

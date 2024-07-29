@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Monads.Option;
 using Tests.Option.Support;
 using Xunit.Abstractions;
@@ -14,7 +15,7 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
         var sampleTask = Task.Run(() => 1);
         var some = Option<Task>.Some(sampleTask);
         var none = Option<Task>.None();
-        
+
         Assert.Equal(sampleTask, some.Reduce(Task.CompletedTask));
         Assert.NotEqual(sampleTask, none.Reduce(Task.CompletedTask));
     }
@@ -30,7 +31,7 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
         var upperLiteral = someLiteral.Map(c => c.ToUpper());
         Assert.Equal("HELLO", upperLiteral.Reduce("hello"));
     }
-    
+
     [Fact]
     public void ShouldWhereReturnSomeWhenPredicateIsTrue()
     {
@@ -38,7 +39,7 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
         var result = some.Where(x => x > 0);
         Assert.Equal(some, result);
     }
-    
+
     [Fact]
     public void ShouldWhereReturnNoneWhenPredicateIsFalse()
     {
@@ -75,13 +76,59 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
             .OrderBy(x => x.Key.Reduce(string.Empty))
             .Select(x => x.Key.Reduce(string.Empty))
             .ToList();
-        
+
         testOutputHelper.WriteLine($"Supported currencies: {supportedCurrencies.Count}");
         foreach (var currency in supportedCurrencies)
             testOutputHelper.WriteLine(currency);
-        
+
         Assert.Equal("EUR", supportedCurrencies.First());
         Assert.Equal("JPY", supportedCurrencies[1]);
         Assert.Equal("USD", supportedCurrencies[2]);
+    }
+
+    [Fact]
+    public void ShouldUseInLogic()
+    {
+        Assert.Equal(Option<string>.Some("United state"), GetCurrencyCountry(new Money(100, "USD")));
+        Assert.Equal(Option<string>.Some("Japan"), GetCurrencyCountry(new Money(100, "JPY")));
+        Assert.Equal(Option<string>.None(), GetCurrencyCountry(Money.NoValue));
+        Assert.Equal(Option<string>.Some("United state"), GetCurrencyCountry(Money.Zero("USD")));
+
+        Assert.Equal(Option<string>.Some("ML"), GetInitialsFromFullName("Marco Lincoln"));
+        Assert.Equal(Option<string>.Some("MA"), GetInitialsFromFullName("MarcoLincoln"));
+        Assert.Equal(Option<string>.None(), GetInitialsFromFullName("Q"));
+        Assert.Equal(Option<string>.None(), GetInitialsFromFullName("        "));
+        
+        Assert.Equal("100,00 USD", DescribeMoney(ValueOption<Money>.Some(new Money(100, "USD"))));
+        Assert.Equal("0,00 ", DescribeMoney(ValueOption<Money>.Some(Money.NoValue)));
+        Assert.Equal("0,00 USD", DescribeMoney(ValueOption<Money>.Some(Money.Zero("USD"))));
+        return;
+
+        Option<string> GetCurrencyCountry(Money money) =>
+            money.Currency.Reduce(string.Empty) switch
+            {
+                "USD" => Option<string>.Some("United state"),
+                "JPY" => Option<string>.Some("Japan"),
+                "EUR" => Option<string>.Some("Europe"),
+                _ => Option<string>.None(),
+            };
+
+        string ToUpperFirst(string s) => s.First().ToString().ToUpper();
+
+        Option<string> GetInitialsFromFullName(string fullName) =>
+            fullName switch
+            {
+                { Length: 1 } => Option<string>.None(),
+                _ => fullName.Split(" ") switch
+                {
+                    [{ } first, { } second] => Option<string>.Some($"{ToUpperFirst(first)}{ToUpperFirst(second)}"),
+                    [{ } whole] => Option<string>.Some(whole[0..2].ToUpper()),
+                    [] => Option<string>.None(),
+                    _ => Option<string>.None()
+                }
+            };
+
+        string DescribeMoney(ValueOption<Money> money) =>
+            money.Map(m => $"{m.Amount:N2} {m.Currency}").Reduce(string.Empty);
     }
 }
