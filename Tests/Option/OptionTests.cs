@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Monads.Option;
 using Tests.Option.Support;
 using Xunit.Abstractions;
@@ -99,9 +100,9 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
         Assert.Equal(Option<string>.None(), GetInitialsFromFullName("Q"));
         Assert.Equal(Option<string>.None(), GetInitialsFromFullName("        "));
         
-        Assert.Equal("100,00 USD", DescribeMoney(ValueOption<Money>.Some(new Money(100, "USD"))));
-        Assert.Equal("0,00 ", DescribeMoney(ValueOption<Money>.Some(Money.NoValue)));
-        Assert.Equal("0,00 USD", DescribeMoney(ValueOption<Money>.Some(Money.Zero("USD"))));
+        Assert.Equal("100.00 USD", DescribeMoney(ValueOption<Money>.Some(new Money(100, "USD"))));
+        Assert.Equal("0.00 ", DescribeMoney(ValueOption<Money>.Some(Money.NoValue)));
+        Assert.Equal("0.00 USD", DescribeMoney(ValueOption<Money>.Some(Money.Zero("USD"))));
         return;
 
         Option<string> GetCurrencyCountry(Money money) =>
@@ -129,6 +130,6 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
             };
 
         string DescribeMoney(ValueOption<Money> money) =>
-            money.Map(m => $"{m.Amount:N2} {m.Currency}").Reduce(string.Empty);
+            money.Map(m => $"{m.Amount.ToString("N2", new CultureInfo("US-us"))} {m.Currency}").Reduce(string.Empty);
     }
 }
