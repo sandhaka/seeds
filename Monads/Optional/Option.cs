@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Monads.Option;
+namespace Monads.Optional;
 
 public struct Option<T> : IEquatable<Option<T>> where T : class
 {

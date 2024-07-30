@@ -1,4 +1,4 @@
-namespace Monads.Option;
+namespace Monads.Optional;
 
 public struct ValueOption<T> : IEquatable<ValueOption<T>> where T : struct
 {

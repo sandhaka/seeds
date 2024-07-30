@@ -1,5 +1,5 @@
-using Monads.Option;
-using Monads.Option.Extensions;
+using Monads.Optional;
+using Monads.Optional.Extensions;
 using Tests.Option.Support;
 
 // ReSharper disable PossibleMultipleEnumeration

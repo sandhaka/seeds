@@ -1,4 +1,4 @@
-using Monads.Option;
+using Monads.Optional;
 
 namespace Tests.Option.Support;
 

@@ -1,6 +1,5 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Monads.Option;
+using Monads.Optional;
 using Tests.Option.Support;
 using Xunit.Abstractions;
 
