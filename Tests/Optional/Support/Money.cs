@@ -1,6 +1,6 @@
 using Monads.Optional;
 
-namespace Tests.Option.Support;
+namespace Tests.Optional.Support;
 
 public record struct Money()
 {

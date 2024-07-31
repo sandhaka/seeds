@@ -1,6 +1,6 @@
 using Monads.Optional;
 
-namespace Tests.Option.Support;
+namespace Tests.Optional.Support;
 
 internal sealed class BankDeposit
 {
