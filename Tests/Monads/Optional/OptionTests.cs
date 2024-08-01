@@ -1,11 +1,11 @@
 using System.Globalization;
 using Monads.Optional;
-using Tests.Optional.Support;
+using Tests.Monads.Optional.Support;
 using Xunit.Abstractions;
 
 // ReSharper disable EqualExpressionComparison
 
-namespace Tests.Optional;
+namespace Tests.Monads.Optional;
 
 public class OptionTests(ITestOutputHelper testOutputHelper)
 {

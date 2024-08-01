@@ -1,10 +1,10 @@
 using Monads.Optional;
 using Monads.Optional.Extensions;
-using Tests.Optional.Support;
+using Tests.Monads.Optional.Support;
 
 // ReSharper disable PossibleMultipleEnumeration
 
-namespace Tests.Optional;
+namespace Tests.Monads.Optional;
 
 public class OptionExtensionsTests
 {

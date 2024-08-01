@@ -25,12 +25,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CollectionsExtensions\CollectionsExtensions.csproj" />
       <ProjectReference Include="..\Ddd\Ddd.csproj" />
       <ProjectReference Include="..\Monads\Monads.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Ddd" />
+      <Folder Include="Monads\" />
     </ItemGroup>
 
 </Project>
