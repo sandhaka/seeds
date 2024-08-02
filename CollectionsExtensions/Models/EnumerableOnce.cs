@@ -2,12 +2,12 @@ using System.Collections;
 
 namespace CollectionsExtensions.Models;
 
-internal sealed class EnumerableOnceSequence<T> : IEnumerable<T>
+internal sealed class EnumerableOnce<T> : IEnumerable<T>
 {
     private readonly IEnumerable<T> _sequence;
     private bool _used;
 
-    public EnumerableOnceSequence(IEnumerable<T> sequence)
+    public EnumerableOnce(IEnumerable<T> sequence)
     {
         _sequence = sequence;
     }

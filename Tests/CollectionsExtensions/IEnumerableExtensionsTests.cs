@@ -4,7 +4,7 @@ using CollectionsExtensions;
 
 namespace Tests.CollectionsExtensions;
 
-public class IEnumerableExtensionsTests
+public class EnumerableExtensionsTests
 {
     [Fact]
     public void ShouldEnumerateOnlyOnce()
