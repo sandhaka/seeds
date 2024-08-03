@@ -23,7 +23,7 @@
       - [ ] Kafka
   - [ ] [Application](./Ddd/Application/): Base classes for Application
     - [ ] CQRS: Command and Query segregation
-- [ ] [Collection Extensions](./CollectionsExtensions/): Utilities to write more safe code by design
+- [ ] [Collection Extensions](./CollectionsExtensions/): Utilities for generic Collections
 ## License
 [MIT](./license)
 

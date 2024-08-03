@@ -16,7 +16,7 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
-    public void ShouldEnumerateOnlyOnce()
+    public void EnumerableOnceShouldEnumerateOnlyOnce()
     {
         var max = int.MinValue;
 
@@ -36,15 +36,34 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
-    public void ShouldFormatAnObjectsSequence()
+    public void DescribableShouldFormatAnObjectsSequence()
     {
-        var accounts = new BankDeposit().MultiCurrencies.Select(m => m.Reduce(Money.NoValue));
+        var accounts = new BankDeposit().MultiCurrencies;
+
+        var describable = accounts
+            .Select(m => m.Reduce(Money.NoValue))
+            .ToDescribable();
         
-        var formatted = accounts.Format();
+        Assert.Equal(["AMOUNT", "CURRENCY"], describable.Header);
+
+        var formatted = describable.Format();
         
-        foreach (var row in formatted)
-        {
-            _testOutputHelper.WriteLine(row);
-        }
+        Assert.Equal("              AMOUNT|            CURRENCY", formatted.ElementAt(0));
+        Assert.Equal("                   0|                 USD", formatted.ElementAt(1));
+    }
+
+    [Fact]
+    public void DescribableShouldBeEnumerable()
+    {
+        var accounts = new BankDeposit().MultiCurrencies;
+
+        var describable = accounts
+            .Select(m => m.Reduce(Money.NoValue))
+            .ToDescribable();
+
+        var descriptions = describable.ToList();
+        
+        Assert.NotEmpty(descriptions);
+        Assert.Contains(descriptions, desc => desc.Currency.Equals("USD"));
     }
 }
