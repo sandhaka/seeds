@@ -5,6 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
+    <Authors>Matteo Tosato</Authors>
+    <Copyright>© 2024 Matteo Tosato</Copyright>
+    <PackageLicenseUrl>https://opensource.org/license/MIT</PackageLicenseUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
