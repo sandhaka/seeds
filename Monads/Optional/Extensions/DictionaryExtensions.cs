@@ -15,7 +15,7 @@ public static class DictionaryExtensions
     /// </returns>
     public static Option<TValue> TryGetOption<TKey, TValue>(
         this IDictionary<TKey, TValue> dictionary, TKey key) where TValue : class =>
-        dictionary.TryGetValue(key, out TValue value)
+        dictionary.TryGetValue(key, out TValue? value)
             ? Option<TValue>.Some(value)
             : Option<TValue>.None();
 

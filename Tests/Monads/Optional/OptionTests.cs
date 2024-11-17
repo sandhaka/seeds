@@ -131,4 +131,20 @@ public class OptionTests(ITestOutputHelper testOutputHelper)
         string DescribeMoney(ValueOption<Money> money) =>
             money.Map(m => $"{m.Amount.ToString("N2", new CultureInfo("US-us"))} {m.Currency}").Reduce(string.Empty);
     }
+    
+    [Fact]
+    public void ShouldConvertValuesImplicitlyToOption()
+    {
+        // Setup
+        var some = "Foo";
+
+        // Act
+        Option<string> optional = some;
+        Option<string> none = null;
+        
+        //Verify
+        Assert.Equal(some, optional.Reduce(string.Empty));
+        Assert.Equal(none, Option<string>.None());
+        
+    }
 }
