@@ -3,7 +3,8 @@
 # Resources for Enterprise development
 [![.NET](https://github.com/sandhaka/seeds/actions/workflows/dotnet.yml/badge.svg)](https://github.com/sandhaka/seeds/actions/workflows/dotnet.yml)
 ## Index
-- [x] [Option](./Monads/Option): Implementation of Option<> generic type based on [Monads](https://en.wikipedia.org/wiki/Monad_(functional_programming)) to manage nullable
+- [Option](./Monads/Option): Implementation of Option<> generic type based on [Monads](https://en.wikipedia.org/wiki/Monad_(functional_programming)) to manage nullable. 
+(_**Moved [here](https://github.com/sandhaka/monads)**_)
 - Domain-Driven-Design Seeds: Collection of DDD snippets
   - About DDD:
     - [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design)

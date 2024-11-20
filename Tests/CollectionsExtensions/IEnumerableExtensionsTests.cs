@@ -1,7 +1,7 @@
 // ReSharper disable PossibleMultipleEnumeration
 
 using CollectionsExtensions;
-using Tests.Monads.Optional.Support;
+using Tests.Support;
 using Xunit.Abstractions;
 
 namespace Tests.CollectionsExtensions;
