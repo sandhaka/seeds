@@ -1,12 +1,10 @@
-using Monads.Optional;
-
 namespace Tests.Support;
 
 internal sealed class BankDeposit
 {
-    public ValueOption<Money> Dollars { get; set; } = ValueOption<Money>.Some(new Money(decimal.Zero, "USD"));
-    public ValueOption<Money> Euros { get; set; } = ValueOption<Money>.Some(new Money(decimal.Zero, "EUR"));
-    public ValueOption<Money> Yens { get; set; } = ValueOption<Money>.Some(new Money(decimal.Zero, "JPY"));
-    
-    public IReadOnlyCollection<ValueOption<Money>> MultiCurrencies => [ Dollars, Euros, Yens ];
+    public Money Dollars { get; set; } = new(decimal.Zero, "USD");
+    public Money Euros { get; set; } = new(decimal.Zero, "EUR");
+    public Money Yens { get; set; } = new(decimal.Zero, "JPY");
+
+    public IReadOnlyCollection<Money> MultiCurrencies => [Dollars, Euros, Yens];
 }

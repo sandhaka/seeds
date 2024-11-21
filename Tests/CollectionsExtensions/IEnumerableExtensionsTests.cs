@@ -41,7 +41,6 @@ public class EnumerableExtensionsTests
         var accounts = new BankDeposit().MultiCurrencies;
 
         var describable = accounts
-            .Select(m => m.Reduce(Money.NoValue))
             .ToDescribable();
         
         Assert.Equal(["AMOUNT", "CURRENCY"], describable.Header);
@@ -58,7 +57,6 @@ public class EnumerableExtensionsTests
         var accounts = new BankDeposit().MultiCurrencies;
 
         var describable = accounts
-            .Select(m => m.Reduce(Money.NoValue))
             .ToDescribable();
 
         var descriptions = describable.ToList();

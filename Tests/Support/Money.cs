@@ -1,22 +1,20 @@
-using Monads.Optional;
-
 namespace Tests.Support;
 
 public record struct Money()
 {
     public decimal Amount { get; }
-    public Option<string> Currency { get; }
+    public string Currency { get; }
 
     private Money(decimal amount) : this()
     {
         Amount = amount;
-        Currency = Option<string>.None();
+        Currency = string.Empty;
     }
     
     public Money(decimal amount, string currency) : this()
     {
         Amount = amount;
-        Currency = Option<string>.Some(currency);
+        Currency = currency;
     }
 
     public static Money NoValue => new(0m);
@@ -26,12 +24,12 @@ public record struct Money()
     public static Money operator +(Money a, Money b)
     {
         if (a.Currency != b.Currency) throw new InvalidOperationException();
-        return new Money(a.Amount + b.Amount, a.Currency.Reduce(string.Empty));
+        return new Money(a.Amount + b.Amount, a.Currency);
     }
     
     public static Money operator -(Money a, Money b)
     {
         if (a.Currency != b.Currency) throw new InvalidOperationException();
-        return new Money(a.Amount - b.Amount, a.Currency.Reduce(string.Empty));
+        return new Money(a.Amount - b.Amount, a.Currency);
     }
 }
